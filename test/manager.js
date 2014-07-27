@@ -17,4 +17,15 @@ describe('Manager', function(){
     assert.equal(!!process.startTs, true);
   });
 
+  it('should allow us to kill processes', function(){
+    var manager = new Manager();
+    manager.run('ping', ['localhost'], {env: {TESTVAR: "123"}});
+    var processes = manager.list();
+    var pids = Object.keys(processes);
+    var process = processes[pids[0]];
+    assert.equal(pids.length, 1);
+    manager.kill(pids[0]);
+    assert.equal(Object.keys(manager.list()).length, 0);
+  });
+
 });
