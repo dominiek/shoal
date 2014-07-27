@@ -1,0 +1,32 @@
+{
+  "name": "Shoal",
+  "description": "A simple process manager for the 21st century",
+  "keywords": [
+    "shoal",
+    "process",
+    "workers",
+    "upstart"
+  ],
+  "version": "0.1.0",
+  "repository": "git://github.com/dominiek/node-shoal.git",
+  "author": "Dominiek ter Heide <dominiek@bottlenose.com>",
+  "license": "BSD",
+  "main": "index",
+  "bin": {
+    "shoald": "./bin/shoald",
+    "shoal": "./bin/shoal"
+  },
+  "scripts": {
+    "test": "NODE_ENV=test mocha --reporter dot test/*"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "dependencies": {
+    "connect": "3.1.0"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*"
+  }
+}
