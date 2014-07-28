@@ -4,28 +4,28 @@ var Manager = require('../lib/manager');
 
 describe('Manager', function(){
 
-  it('should run processes and keep track of those', function(){
+  it('should run instances and keep track of those', function(){
     var manager = new Manager();
-    manager.runProcess('ping', ['localhost'], {env: {TESTVAR: "123"}});
-    var processes = manager.listProcesses();
-    var pids = Object.keys(processes);
-    var process = processes[pids[0]];
+    manager.run('ping', ['localhost'], {env: {TESTVAR: "123"}});
+    var instances = manager.listInstances();
+    var pids = Object.keys(instances);
+    var instance = instances[pids[0]];
     assert.equal(pids.length, 1);
-    assert.equal(process.command, 'ping');
-    assert.equal(process.env.TESTVAR, '123');
-    assert.equal(!!process.env.PATH, true);
-    assert.equal(!!process.startTs, true);
+    assert.equal(instance.command, 'ping');
+    assert.equal(instance.env.TESTVAR, '123');
+    assert.equal(!!instance.env.PATH, true);
+    assert.equal(!!instance.startTs, true);
   });
 
-  it('should allow us to kill processes', function(){
+  it('should allow us to kill instances', function(){
     var manager = new Manager();
-    manager.runProcess('ping', ['localhost'], {env: {TESTVAR: "123"}});
-    var processes = manager.listProcesses();
-    var pids = Object.keys(processes);
-    var process = processes[pids[0]];
+    manager.run('ping', ['localhost'], {env: {TESTVAR: "123"}});
+    var instances = manager.listInstances();
+    var pids = Object.keys(instances);
+    var instance = instances[pids[0]];
     assert.equal(pids.length, 1);
-    manager.killProcess(pids[0]);
-    assert.equal(Object.keys(manager.listProcesses()).length, 0);
+    manager.kill(pids[0]);
+    assert.equal(Object.keys(manager.listInstances()).length, 0);
   });
 
 });
