@@ -41,6 +41,13 @@ describe('Manager', function(){
           cmd: 'ping',
           args: ['localhost'],
           instances: 3
+        },
+        {
+          name: 'Ping Localhost 2',
+          cmd: 'ping',
+          args: ['localhost'],
+          env: {TESTVAR: '123'},
+          instances: 0
         }
       ]
     };
@@ -49,9 +56,12 @@ describe('Manager', function(){
     var instances = manager.listInstances();
     assert.deepEqual(Object.keys(instances).map(function(pid) { return instances[pid].command; }), ['ping', 'ping', 'ping']);
     configuration.processes[1].instances--;
+    configuration.processes[2].instances++;
+    configuration.processes[2].instances++;
     manager.deploy(configuration);
     var instances = manager.listInstances();
-    assert.deepEqual(Object.keys(instances).map(function(pid) { return instances[pid].command; }), ['ping', 'ping']);
+    assert.deepEqual(Object.keys(instances).map(function(pid) { return instances[pid].command; }), ['ping', 'ping', 'ping', 'ping']);
+    assert.deepEqual(Object.keys(instances).map(function(pid) { return !!instances[pid].env.TESTVAR; }), [false, false, true, true]);
   });
 
   it('should run instances and keep track of those', function(){
