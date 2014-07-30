@@ -48,7 +48,7 @@ describe('Manager', function(){
     assert.equal(status.processes[1].runningInstances[0].env.COMMON, "yes");
   });
 
-  it('should properly stop instances when number of instances change in configuration', function(){
+  it('should properly stop instances when number of instances change in configuration', function(done){
     var manager = new Manager();
     manager.deploy(configuration);
     var instances = manager.listInstances();
@@ -57,9 +57,12 @@ describe('Manager', function(){
     configuration.processes[2].instances++;
     configuration.processes[2].instances++;
     manager.deploy(configuration);
-    var instances = manager.listInstances();
-    assert.deepEqual(Object.keys(instances).map(function(pid) { return instances[pid].command; }), ['ping', 'ping', 'ping', 'ping']);
-    assert.deepEqual(Object.keys(instances).map(function(pid) { return !!instances[pid].env.TESTVAR; }), [false, false, true, true]);
+    setTimeout(function() {
+      var instances = manager.listInstances();
+      assert.deepEqual(Object.keys(instances).map(function(pid) { return instances[pid].command; }), ['ping', 'ping', 'ping', 'ping']);
+      assert.deepEqual(Object.keys(instances).map(function(pid) { return !!instances[pid].env.TESTVAR; }), [false, false, true, true]);
+      done();
+    }, 500);
   });
 
   it('should run instances and keep track of those', function(done){
@@ -82,7 +85,26 @@ describe('Manager', function(){
     }, 1000);
   });
 
-  it('should allow us to kill instances', function(){
+  it('should deal with instances that are hard to kill', function(done){
+    this.timeout(4000);
+    var manager = new Manager();
+    manager.run('node', [__dirname + '/../tools/stayingalive.js']);
+    var instances = manager.listInstances();
+    var pids = Object.keys(instances);
+    var instance = instances[pids[0]];
+    assert.equal(pids.length, 1);
+    setTimeout(function() {
+      manager.kill(pids[0], {terminateTimeout: 1000});
+    }, 600);
+    setTimeout(function() {
+      var instances = manager.listInstances();
+      var pids = Object.keys(instances);
+      assert.equal(pids.length, 0);
+      done();
+    }, 2500);
+  });
+
+  it('should allow us to kill instances', function(done){
     var manager = new Manager();
     manager.run('ping', ['localhost'], {env: {TESTVAR: "123"}});
     var instances = manager.listInstances();
@@ -90,7 +112,10 @@ describe('Manager', function(){
     var instance = instances[pids[0]];
     assert.equal(pids.length, 1);
     manager.kill(pids[0]);
-    assert.equal(Object.keys(manager.listInstances()).length, 0);
+    setTimeout(function() {
+      assert.equal(Object.keys(manager.listInstances()).length, 0);
+      done();
+    }, 500);
   });
 
 });
