@@ -37,7 +37,8 @@ function pad(pad, str, padLeft) {
 program
   .command('status')
   .description('Show current configuration and active processes')
-  .action(function() {
+  .option('--verbose', 'Show more details about the running instances')
+  .action(function(options) {
     client.status(function(err, status) {
       if (err) return error(err);
       if (!status || !status.processes) {
@@ -52,6 +53,13 @@ program
           status = pad('                                                   ', '[ '.bold + status + ' ]'.bold);
           line += status
           console.log(line);
+          if (!options.verbose) return;
+          if (!numRunningInstances) return;
+          process.runningInstances.forEach(function(instance) {
+            var line = '  ' + process.id + '/' + instance.pid;
+            console.log(line.grey)
+          })
+          console.log("")
         });
         console.log("");
       }
