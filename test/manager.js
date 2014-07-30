@@ -4,6 +4,9 @@ var Manager = require('../lib/manager');
 
 describe('Manager', function(){
   var configuration = {
+    env: {
+      "COMMON": "yes"
+    },
     processes: [
       {
         name: 'Some Daemon',
@@ -42,6 +45,7 @@ describe('Manager', function(){
     assert.equal(status.processes[1].runningInstances.length, 3);
     assert.equal(!!status.processes[1].runningInstances[0].pid, true);
     assert.equal(!!status.processes[1].runningInstances[0].startTs, true);
+    assert.equal(status.processes[1].runningInstances[0].env.COMMON, "yes");
   });
 
   it('should properly stop instances when number of instances change in configuration', function(){

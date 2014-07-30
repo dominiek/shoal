@@ -1,4 +1,7 @@
 {
+  "env": {
+    "NODE_ENV": "staging"
+  },
   "processes": [
     {
       "name": "Ping Localhost",
