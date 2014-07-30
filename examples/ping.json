@@ -13,6 +13,15 @@
       "instances": 1
     },
     {
+      "name": "Ping 127.0.0.1",
+      "cmd": "ping",
+      "args": ["127.0.0.1"],
+      "env": {
+        "LOGFILE": "example.log"
+      },
+      "instances": 1
+    },
+    {
       "name": "Ping Google",
       "cmd": "ping",
       "args": ["google.com"],
