@@ -62,7 +62,7 @@ describe('Manager', function(){
     assert.deepEqual(Object.keys(instances).map(function(pid) { return !!instances[pid].env.TESTVAR; }), [false, false, true, true]);
   });
 
-  it('should run instances and keep track of those', function(){
+  it('should run instances and keep track of those', function(done){
     var manager = new Manager();
     manager.run('ping', ['localhost'], {env: {TESTVAR: "123"}});
     var instances = manager.listInstances();
@@ -73,6 +73,13 @@ describe('Manager', function(){
     assert.equal(instance.env.TESTVAR, '123');
     assert.equal(!!instance.env.PATH, true);
     assert.equal(!!instance.startTs, true);
+    process.kill(pids[0], 'SIGTERM');
+    setTimeout(function() {
+      var instances = manager.listInstances();
+      var pids = Object.keys(instances);
+      assert.equal(pids.length, 0);
+      done();
+    }, 1000);
   });
 
   it('should allow us to kill instances', function(){
