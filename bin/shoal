@@ -1,0 +1,87 @@
+#!/usr/bin/env node
+
+var fs = require('fs');
+var program = require('commander');
+var colors = require('colors');
+
+var Client = require('../lib/client');
+var defaults = require('../lib/defaults');
+var version = JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf8')).version;
+
+program
+  .version(version)
+  .usage('[options] <command>')
+  .option('-p, --port <port>', 'Manager server port to connect to (Default: ' + defaults.port + ')', parseInt)
+  .option('-s, --server <host>', 'Manager server to connect to (Default: ' + defaults.host + ')')
+program.name = 'shoal';
+
+var client = new Client({
+  port: program.port,
+  host: program.server
+});
+
+var error = function(err) {
+  console.warn("Error:", err.message);
+  process.exit();
+};
+
+function pad(pad, str, padLeft) {
+  if (str == undefined) return pad;
+  if (padLeft) {
+    return (pad + str).slice(-pad.length);
+  } else {
+    return (str + pad).substring(0, pad.length);
+  }
+}
+
+program
+  .command('status')
+  .description('Show current configuration and active processes')
+  .action(function() {
+    client.status(function(err, status) {
+      if (err) return error(err);
+      if (!status || !status.processes) {
+        console.log("No processes configured yet on server (use `shoal deploy`)");
+      } else {
+        console.log("");
+        status.processes.forEach(function(process) {
+          var line = pad('                 ', process.name);
+          var numRunningInstances = process.runningInstances.length;
+          var status = numRunningInstances ? (numRunningInstances + ' RUNNING') : ' STOPPED ';
+          status = numRunningInstances ? status.green.bold : status.red.bold;
+          status = pad('                                                   ', '[ '.bold + status + ' ]'.bold);
+          line += status
+          console.log(line);
+        });
+        console.log("");
+      }
+      process.exit();
+    });
+  });
+
+program
+  .command('deploy <path>')
+  .description('Deploy a new configuration of processes to Shoal Manager')
+  .action(function(path) {
+    if (!fs.existsSync(path)) {
+      return error(new Error("No such file: " + path));
+    }
+    var configuration = fs.readFileSync(path).toString();
+    try {
+      configuration = JSON.parse(configuration);
+    } catch(err) {
+      err.message = 'Invalid Configuration: ' + err.message;
+      return error(err);
+    }
+    client.deploy(configuration, function(err, status) {
+      if (err) return error(err);
+      console.log("New processes deployed");
+      process.exit();
+    });
+  });
+
+if (!process.argv[2])
+  process.argv.push('-h');
+
+program.parse(process.argv);
+
