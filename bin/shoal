@@ -38,9 +38,14 @@ program
   .command('status')
   .description('Show current configuration and active processes')
   .option('--verbose', 'Show more details about the running instances')
+  .option('--json', 'Output detailed JSON')
   .action(function(options) {
     client.status(function(err, status) {
       if (err) return error(err);
+      if (options.json) {
+        console.log(JSON.stringify(status));
+        return process.exit();
+      }
       if (!status || !status.processes) {
         console.log("No processes configured yet on server (use `shoal deploy`)");
       } else {
