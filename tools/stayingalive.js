@@ -11,6 +11,4 @@ process.on('SIGTERM', function() {
   console.log("Staying alive");
 });
 
-setInterval(function() {
-  console.log("Ha");
-}, 10);
+while(1) { console.log("Ha"); }
