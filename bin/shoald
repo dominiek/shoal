@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+
+var fs = require('fs');
+var program = require('commander');
+
+var Manager = require('../lib/manager');
+var Server = require('../lib/server');
+var defaults = require('../lib/defaults');
+var version = JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf8')).version;
+
+program
+  .version(version)
+  .usage('[options]')
+  .option('-p, --port <port>', 'Port to bind on (Default: ' + defaults.port + ')', parseInt)
+  .option('-b, --bind <host>', 'Host to bind on (Default: ' + defaults.host + ')')
+program.name = 'shoald';
+program.parse(process.argv);
+
+var server = new Server(new Manager());
+server.start({
+  port: program.port,
+  host: program.bind
+});
