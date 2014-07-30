@@ -45,6 +45,13 @@ describe('Client', function(){
           assert.equal(3, Object.keys(result).length);
           next();
         });
+      },
+      function(next) {
+        client.status(function(err, status) {
+          assert.equal(err, null);
+          assert.equal(status.processes[0].runningInstances.length, 3);
+          next();
+        });
       }
     ], done);
   });
