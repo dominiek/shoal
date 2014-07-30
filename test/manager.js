@@ -3,54 +3,48 @@ var assert = require('chai').assert;
 var Manager = require('../lib/manager');
 
 describe('Manager', function(){
+  var configuration = {
+    processes: [
+      {
+        name: 'Some Daemon',
+        cmd: '/usr/bin/somed',
+        args: ['-f'],
+        instances: 0
+      },
+      {
+        name: 'Ping Localhost',
+        cmd: 'ping',
+        args: ['localhost'],
+        instances: 3
+      },
+      {
+        name: 'Ping Localhost 2',
+        cmd: 'ping',
+        args: ['localhost'],
+        env: {TESTVAR: '123'},
+        instances: 0
+      }
+    ]
+  };
 
   it('should allow us to deploy new processes and should fire off instances based on this', function(){
-    var configuration = {
-      processes: [
-        {
-          name: 'Some Daemon',
-          cmd: '/usr/bin/somed',
-          args: ['-f'],
-          instances: 0
-        },
-        {
-          name: 'Ping Localhost',
-          cmd: 'ping',
-          args: ['localhost'],
-          instances: 3
-        }
-      ]
-    };
     var manager = new Manager();
     manager.deploy(configuration);
     var instances = manager.listInstances();
     assert.deepEqual(Object.keys(instances).map(function(pid) { return instances[pid].command; }), ['ping', 'ping', 'ping']);
   });
 
+  it('should give us a list of the current status', function(){
+    var manager = new Manager();
+    manager.deploy(configuration);
+    var status = manager.status();
+    assert.equal(status.processes[0].runningInstances.length, 0);
+    assert.equal(status.processes[1].runningInstances.length, 3);
+    assert.equal(!!status.processes[1].runningInstances[0].pid, true);
+    assert.equal(!!status.processes[1].runningInstances[0].startTs, true);
+  });
+
   it('should properly stop instances when number of instances change in configuration', function(){
-    var configuration = {
-      processes: [
-        {
-          name: 'Some Daemon',
-          cmd: '/usr/bin/somed',
-          args: ['-f'],
-          instances: 0
-        },
-        {
-          name: 'Ping Localhost',
-          cmd: 'ping',
-          args: ['localhost'],
-          instances: 3
-        },
-        {
-          name: 'Ping Localhost 2',
-          cmd: 'ping',
-          args: ['localhost'],
-          env: {TESTVAR: '123'},
-          instances: 0
-        }
-      ]
-    };
     var manager = new Manager();
     manager.deploy(configuration);
     var instances = manager.listInstances();
