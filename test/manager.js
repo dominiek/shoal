@@ -51,7 +51,7 @@ describe('Manager', function(){
   it('should properly stop instances when number of instances change in configuration', function(done){
     var manager = new Manager();
     var newConfiguration = JSON.parse(JSON.stringify(configuration));
-    newConfiguration.terminateTimeout = 2000;
+    newConfiguration.killTimeoutMs = 2000;
     manager.deploy(newConfiguration);
     var instances = manager.listInstances();
     assert.deepEqual(Object.keys(instances).map(function(pid) { return instances[pid].command; }), ['ping', 'ping', 'ping']);
@@ -61,14 +61,14 @@ describe('Manager', function(){
     var kill = manager.kill;
     manager.kill = function(pid, options) {
       assert.equal(!!options, true);
-      assert.equal(options.terminateTimeout, 2000);
+      assert.equal(options.killTimeoutMs, 2000);
       manager.kill = kill;
       done();
     };
     manager.deploy(newConfiguration);
   });
 
-  it('should properly use the terminateTimeout setting', function(done){
+  it('should properly use the killTimeoutMs setting', function(done){
     var manager = new Manager();
     var newConfiguration = JSON.parse(JSON.stringify(configuration));
     manager.deploy(newConfiguration);
@@ -115,7 +115,7 @@ describe('Manager', function(){
     var instance = instances[pids[0]];
     assert.equal(pids.length, 1);
     setTimeout(function() {
-      manager.kill(pids[0], {terminateTimeout: 1000});
+      manager.kill(pids[0], {killTimeoutMs: 1000});
     }, 600);
     setTimeout(function() {
       var instances = manager.listInstances();
