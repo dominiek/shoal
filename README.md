@@ -21,6 +21,8 @@ This is still under heavy development. Do not run this in a production environme
 
 ### TODO
 
-* Ability to specify output for processes
 * Basic admin web UI for status
+* Setup Travis CI
+* Update documentation
+* Setup OSS site
 * Ability to update process configuration in admin web UI

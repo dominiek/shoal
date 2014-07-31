@@ -1,4 +1,5 @@
 
+var fs = require('fs');
 var assert = require('chai').assert;
 var Manager = require('../lib/manager');
 
@@ -7,6 +8,7 @@ describe('Manager', function(){
     env: {
       "COMMON": "yes"
     },
+    quiet: true,
     processes: [
       {
         name: 'Some Daemon',
@@ -71,7 +73,6 @@ describe('Manager', function(){
     }, 2000);
   });
 
-
   it('should properly use the killTimeoutMs setting', function(done){
     var manager = new Manager();
     var newConfiguration = JSON.parse(JSON.stringify(configuration));
@@ -110,9 +111,44 @@ describe('Manager', function(){
     }, 500);
   });
 
+  it('should allow us to specify output files for stdout and stderr', function(done){
+    this.timeout(3000);
+    var manager = new Manager();
+    var newConfiguration = JSON.parse(JSON.stringify(configuration));
+    newConfiguration.processes[1].logRoot = '/tmp';
+    newConfiguration.quiet = false;
+    manager.deploy(newConfiguration);
+    setTimeout(function() {
+      var path = '/tmp/ping-localhost.out';
+      var data = fs.readFileSync(path).toString();
+      assert.equal(data.length > 100, true);
+      fs.unlinkSync(path);
+
+      var path = '/tmp/ping-localhost.err';
+      var data = fs.readFileSync(path).toString();
+      assert.equal(data.length, 0);
+      fs.unlinkSync(path);
+      done();
+    }, 400);
+  });
+
+  it('should check if logging dir exists', function(){
+    var manager = new Manager();
+    var newConfiguration = JSON.parse(JSON.stringify(configuration));
+    newConfiguration.processes[1].logRoot = 'bla';
+    assert.throws(function() { manager.deploy(newConfiguration); }, Error, /folder does not exist/);
+  });
+
+  it('should check if logging dir is configured', function(){
+    var manager = new Manager();
+    var newConfiguration = JSON.parse(JSON.stringify(configuration));
+    newConfiguration.processes[1].logFile = 'hello.out';
+    assert.throws(function() { manager.deploy(newConfiguration); }, Error, /without a logRoot /);
+  });
+
   it('should run instances and keep track of those', function(done){
     var manager = new Manager();
-    manager.run('ping', ['localhost'], {env: {TESTVAR: "123"}});
+    manager.run('ping', ['localhost'], {env: {TESTVAR: "123"}, quiet: true});
     var instances = manager.listInstances();
     var pids = Object.keys(instances);
     var instance = instances[pids[0]];
@@ -133,7 +169,7 @@ describe('Manager', function(){
   it('should deal with instances that are hard to kill', function(done){
     this.timeout(4000);
     var manager = new Manager();
-    manager.run('node', [__dirname + '/../tools/stayingalive.js']);
+    manager.run('node', [__dirname + '/../tools/stayingalive.js'], {quiet: true});
     var instances = manager.listInstances();
     var pids = Object.keys(instances);
     var instance = instances[pids[0]];
@@ -151,7 +187,7 @@ describe('Manager', function(){
 
   it('should allow us to kill instances', function(done){
     var manager = new Manager();
-    manager.run('ping', ['localhost'], {env: {TESTVAR: "123"}});
+    manager.run('ping', ['localhost'], {env: {TESTVAR: "123"}, quiet: true});
     var instances = manager.listInstances();
     var pids = Object.keys(instances);
     var instance = instances[pids[0]];

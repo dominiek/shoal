@@ -3,6 +3,7 @@
     "NODE_ENV": "staging"
   },
   "killTimeoutMs": 30000,
+  "quiet": true,
   "processes": [
     {
       "name": "Ping Localhost",
