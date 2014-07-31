@@ -23,5 +23,6 @@ This is still under heavy development. Do not run this in a production environme
 
 * Shoal Manager should log starting and stopping of process instances
 * Ability to specify output for processes
+* Ability to configure retry/restart behavior
 * Basic admin web UI for status
 * Ability to update process configuration in admin web UI
