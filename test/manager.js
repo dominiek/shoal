@@ -48,7 +48,7 @@ describe('Manager', function(){
     assert.equal(status.processes[1].runningInstances[0].env.COMMON, "yes");
   });
 
-  it('should properly stop instances when number of instances change in configuration', function(done){
+  it('should properly use the killTimeoutMs setting', function(done){
     var manager = new Manager();
     var newConfiguration = JSON.parse(JSON.stringify(configuration));
     newConfiguration.killTimeoutMs = 2000;
@@ -68,7 +68,7 @@ describe('Manager', function(){
     manager.deploy(newConfiguration);
   });
 
-  it('should properly use the killTimeoutMs setting', function(done){
+  it('should properly stop instances when number of instances change in configuration', function(done){
     var manager = new Manager();
     var newConfiguration = JSON.parse(JSON.stringify(configuration));
     manager.deploy(newConfiguration);
