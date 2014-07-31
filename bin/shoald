@@ -13,10 +13,11 @@ program
   .usage('[options]')
   .option('-p, --port <port>', 'Port to bind on (Default: ' + defaults.port + ')', parseInt)
   .option('-b, --bind <host>', 'Host to bind on (Default: ' + defaults.host + ')')
+  .option('--verbose', 'More verbose output')
 program.name = 'shoald';
 program.parse(process.argv);
 
-var server = new Server(new Manager());
+var server = new Server(new Manager({verbose: program.verbose}));
 server.start({
   port: program.port,
   host: program.bind
