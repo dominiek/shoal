@@ -18,7 +18,8 @@ describe('Manager', function(){
         name: 'Ping Localhost',
         cmd: 'ping',
         args: ['localhost'],
-        instances: 3
+        instances: 3,
+        env: {NODE_ENV: 'staging'}
       },
       {
         name: 'Ping Localhost 2',
@@ -47,6 +48,29 @@ describe('Manager', function(){
     assert.equal(!!status.processes[1].runningInstances[0].startTs, true);
     assert.equal(status.processes[1].runningInstances[0].env.COMMON, "yes");
   });
+
+  it('should properly use the autoRestart setting', function(done){
+    this.timeout(4000);
+    var manager = new Manager();
+    var newConfiguration = JSON.parse(JSON.stringify(configuration));
+    newConfiguration.autoRestart = true;
+    newConfiguration.autoRestartTimeoutMs = 1000;
+    manager.deploy(newConfiguration);
+    var instances = manager.listInstances();
+    assert.deepEqual(Object.keys(instances).map(function(pid) { return instances[pid].command; }), ['ping', 'ping', 'ping']);
+    process.kill(instances[Object.keys(instances)[0]].pid, 'SIGHUP');
+    setTimeout(function() {
+      var instances = manager.listInstances();
+      assert.deepEqual(Object.keys(instances).map(function(pid) { return instances[pid].command; }), ['ping', 'ping']);
+    }, 100);
+    setTimeout(function() {
+      var instances = manager.listInstances();
+      assert.deepEqual(Object.keys(instances).map(function(pid) { return instances[pid].command; }), ['ping', 'ping', 'ping']);
+      assert.deepEqual(Object.keys(instances).map(function(pid) { return !!instances[pid].env.NODE_ENV; }), [true, true, true]);
+      done();
+    }, 2000);
+  });
+
 
   it('should properly use the killTimeoutMs setting', function(done){
     var manager = new Manager();
