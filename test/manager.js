@@ -50,13 +50,34 @@ describe('Manager', function(){
 
   it('should properly stop instances when number of instances change in configuration', function(done){
     var manager = new Manager();
-    manager.deploy(configuration);
+    var newConfiguration = JSON.parse(JSON.stringify(configuration));
+    newConfiguration.terminateTimeout = 2000;
+    manager.deploy(newConfiguration);
     var instances = manager.listInstances();
     assert.deepEqual(Object.keys(instances).map(function(pid) { return instances[pid].command; }), ['ping', 'ping', 'ping']);
-    configuration.processes[1].instances--;
-    configuration.processes[2].instances++;
-    configuration.processes[2].instances++;
-    manager.deploy(configuration);
+    newConfiguration.processes[1].instances--;
+    newConfiguration.processes[2].instances++;
+    newConfiguration.processes[2].instances++;
+    var kill = manager.kill;
+    manager.kill = function(pid, options) {
+      assert.equal(!!options, true);
+      assert.equal(options.terminateTimeout, 2000);
+      manager.kill = kill;
+      done();
+    };
+    manager.deploy(newConfiguration);
+  });
+
+  it('should properly use the terminateTimeout setting', function(done){
+    var manager = new Manager();
+    var newConfiguration = JSON.parse(JSON.stringify(configuration));
+    manager.deploy(newConfiguration);
+    var instances = manager.listInstances();
+    assert.deepEqual(Object.keys(instances).map(function(pid) { return instances[pid].command; }), ['ping', 'ping', 'ping']);
+    newConfiguration.processes[1].instances--;
+    newConfiguration.processes[2].instances++;
+    newConfiguration.processes[2].instances++;
+    manager.deploy(newConfiguration);
     setTimeout(function() {
       var instances = manager.listInstances();
       assert.deepEqual(Object.keys(instances).map(function(pid) { return instances[pid].command; }), ['ping', 'ping', 'ping', 'ping']);
