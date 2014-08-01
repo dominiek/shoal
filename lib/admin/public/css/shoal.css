@@ -43,6 +43,7 @@ ul li {
 }
 
 .status .processes li {
+  position: relative;
   background-color: #666;
   border-radius: 6px;
   margin-bottom: 2%;
@@ -51,6 +52,43 @@ ul li {
 .status .processes .name {
   display: inline-block;
   margin: 2%;
+}
+
+.status .processes .controls {
+}
+
+.status .processes .controls a:hover {
+  background-color: #999;
+}
+
+.status .processes .controls a {
+  color: #eee;
+  text-decoration: none;
+  background-color: #444;
+  width: 30px;
+  height: 30px;
+  line-height: 28px;
+  text-align: center;
+}
+
+.status .processes .controls a.dec {
+  position: absolute;
+  top: 8px;
+  left: -40px;
+}
+
+.status .processes .controls a.inc {
+  position: absolute;
+  top: 8px;
+  right: -40px;
+}
+
+.status .processes .controls a.inc:after {
+  content: "+";
+}
+
+.status .processes .controls a.dec:after {
+  content: "-";
 }
 
 .processes .instances {
