@@ -21,9 +21,9 @@ This is still under heavy development. Do not run this in a production environme
 
 ### TODO
 
-* Allow admin UI to be customized
 * Allow internal variables to be used in configuration template
 * Setup Travis CI
 * Update documentation
 * Setup OSS site
 * Ability to update process configuration in admin web UI
+* Optimize Admin UI for mobile

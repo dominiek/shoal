@@ -17,6 +17,7 @@ program
   .option('-b, --bind <host>', 'Host to bind on (Default: ' + defaults.host + ')')
   .option('-ap, --admin-port <port>', 'Port to bind Admin UI on (Default: ' + defaults.adminPort + ')', parseInt)
   .option('-ab, --admin-bind <host>', 'Host to bind Admin UI on (Default: ' + defaults.adminHost + ')')
+  .option('-ah, --admin-html-file <path>', 'Path to HTML file to customize Admin UI')
   .option('--disable-ui', 'Disable Admin UI')
   .option('--quiet', "Don't show Shoal info")
   .option('--verbose', 'More verbose output')
@@ -36,10 +37,24 @@ server.start({
 if (!program.disableAdminUi) {
   var host = program.host;
   if (host == "0.0.0.0") host = 'localhost';
+
+  var adminHtmlFile = program.adminHtmlFile;
+  if (!adminHtmlFile.match(/^\//)) adminHtmlFile = process.cwd() + '/' + adminHtmlFile;
+  if (!fs.existsSync(adminHtmlFile)) {
+    console.warn("HTML file does not exist:", adminHtmlFile);
+    return process.exit();
+  }
+  if (!adminHtmlFile.match(/\.html$/)) {
+    console.warn("Admin UI override file needs .html extension");
+    return process.exit();
+  }
+
   var admin = new Admin(new Client({
     port: program.port,
     host: host
-  }));
+  }), {
+    adminHtmlFile: adminHtmlFile
+  });
   admin.start({
     port: program.adminPort,
     host: program.adminBind,
