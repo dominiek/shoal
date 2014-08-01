@@ -17,7 +17,7 @@
       "args": ["127.0.0.1"],
       "instances": 1,
       "autoRestart": true,
-      "autoRestartTimeoutMs": 3000,
+      "autoRestartTimeoutMs": 3000
     },
     {
       "name": "Ping 127.0.0.1",

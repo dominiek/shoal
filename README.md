@@ -21,7 +21,8 @@ This is still under heavy development. Do not run this in a production environme
 
 ### TODO
 
-* Basic admin web UI for status
+* Allow admin UI to be customized
+* Allow internal variables to be used in configuration template
 * Setup Travis CI
 * Update documentation
 * Setup OSS site

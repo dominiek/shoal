@@ -5,6 +5,8 @@ var program = require('commander');
 
 var Manager = require('../lib/manager');
 var Server = require('../lib/server');
+var Client = require('../lib/client');
+var Admin = require('../lib/admin');
 var defaults = require('../lib/defaults');
 var version = JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf8')).version;
 
@@ -13,12 +15,34 @@ program
   .usage('[options]')
   .option('-p, --port <port>', 'Port to bind on (Default: ' + defaults.port + ')', parseInt)
   .option('-b, --bind <host>', 'Host to bind on (Default: ' + defaults.host + ')')
+  .option('-ap, --admin-port <port>', 'Port to bind Admin UI on (Default: ' + defaults.adminPort + ')', parseInt)
+  .option('-ab, --admin-bind <host>', 'Host to bind Admin UI on (Default: ' + defaults.adminHost + ')')
+  .option('--disable-ui', 'Disable Admin UI')
+  .option('--quiet', "Don't show Shoal info")
   .option('--verbose', 'More verbose output')
 program.name = 'shoald';
 program.parse(process.argv);
 
-var server = new Server(new Manager({verbose: program.verbose}));
+var server = new Server(new Manager({
+  verbose: program.verbose,
+  quiet: program.quiet
+}));
 server.start({
   port: program.port,
-  host: program.bind
+  host: program.bind,
+  quiet: program.quiet
 });
+
+if (!program.disableAdminUi) {
+  var host = program.host;
+  if (host == "0.0.0.0") host = 'localhost';
+  var admin = new Admin(new Client({
+    port: program.port,
+    host: host
+  }));
+  admin.start({
+    port: program.adminPort,
+    host: program.adminBind,
+    quiet: program.quiet
+  });
+}
