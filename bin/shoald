@@ -39,14 +39,16 @@ if (!program.disableAdminUi) {
   if (host == "0.0.0.0") host = 'localhost';
 
   var adminHtmlFile = program.adminHtmlFile;
-  if (!adminHtmlFile.match(/^\//)) adminHtmlFile = process.cwd() + '/' + adminHtmlFile;
-  if (!fs.existsSync(adminHtmlFile)) {
-    console.warn("HTML file does not exist:", adminHtmlFile);
-    return process.exit();
-  }
-  if (!adminHtmlFile.match(/\.html$/)) {
-    console.warn("Admin UI override file needs .html extension");
-    return process.exit();
+  if (adminHtmlFile) {
+    if (!adminHtmlFile.match(/^\//)) adminHtmlFile = process.cwd() + '/' + adminHtmlFile;
+    if (!fs.existsSync(adminHtmlFile)) {
+      console.warn("HTML file does not exist:", adminHtmlFile);
+      return process.exit();
+    }
+    if (!adminHtmlFile.match(/\.html$/)) {
+      console.warn("Admin UI override file needs .html extension");
+      return process.exit();
+    }
   }
 
   var admin = new Admin(new Client({
