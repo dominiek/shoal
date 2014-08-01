@@ -117,4 +117,41 @@ ul li {
   content: "STOPPED";
 }
 
+
+@media only screen and (max-device-width : 320px) {
+
+  body {
+    width: 100%;
+    margin: 0;
+  }
+
+  .status {
+    width: 70%;
+    margin: 10% auto;
+    font-size: 90%;
+  }
+
+.status .processes .name {
+  display: inline-block;
+  margin: 7% 0 7% 4%;
+}
+
 .status .processes li {
+  position: relative;
+  background-color: #666;
+  border-radius: 6px;
+  margin-bottom: 7%;
+}
+
+.processes .instances {
+  display: block;
+  float: right;
+  width: 37%;
+  font-size: 90%;
+  padding: 7% 0;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  text-align: center;
+}
+
+}

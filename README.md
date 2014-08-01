@@ -25,5 +25,3 @@ This is still under heavy development. Do not run this in a production environme
 * Setup Travis CI
 * Update documentation
 * Setup OSS site
-* Ability to update process configuration in admin web UI
-* Optimize Admin UI for mobile
