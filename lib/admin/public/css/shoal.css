@@ -38,6 +38,10 @@ ul li {
   font-size: 120%;
 }
 
+.status p {
+  text-align: center;
+}
+
 .status .processes li {
   background-color: #666;
   border-radius: 6px;
