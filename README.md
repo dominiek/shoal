@@ -7,20 +7,30 @@ Shoal allows you to group and run multiple processes. Shoal manages these proces
 
 Use-cases:
 
+* Centralize process/worker configuration using a single JSON config file (Avoid hundreds of upstart scripts)
+* Use a CLI and Web UI to monitor and control a large number of process/worker instances
 * Simplifying process/worker management for developers (e.g. local installs of ETL's)
-* Managing all processes/workers into a single JSON config file instead of hundreds of upstart scripts
-* A slick UI to see the status of processes and control them
-
-Future:
-
-* Smart transitions from one JSON configuration to the other (e.g. stopping workers that were removed from the configuration after a deployment)
-* Control/status of processes across multiple machines
+* Smart deployments: Automatically stop workers that have been removed from configuration, and start instances that were added
+* Centrally control logging, environment and restart behavior of processes
 
 ### Status
 
-This is still under heavy development. Do not run this in a production environment.
+This project is still early stage. We do not recommend using this in production unless a proper security audit has been done. Current use should be for development environments only.
 
-### TODO
+### Security
+
+By default, the Shoal Manager (`shoald`) binds to `127.0.0.1` and allows execution of commands sent to it. This is something to be taken into consideration when running outside of sandboxed environments. No security features are supplied with Shoal currently so environment-specific security mechanisms should be implemented by yourself.
+
+## Usage
+
+TODO
+
+## Future
+
+* Improve default security features
+* Allow Shoal to dynamically control the number of instances per process definition based on the 'business' of the running instances
+
+## TODO
 
 * Update documentation
 * Setup OSS site
