@@ -132,6 +132,31 @@ describe('Manager', function(){
     }, 400);
   });
 
+  it('should allow us to use internal variables in the environment', function(){
+    var manager = new Manager();
+    var newConfiguration = JSON.parse(JSON.stringify(configuration));
+    newConfiguration.logRoot = '/tmp';
+    newConfiguration.processes[1].env = {
+      'TEST_NAME':       '$processName',
+      'TEST_SHORT_NAME': '$processShortName',
+      'TEST_ID':         '$processId',
+      'TEST_CWD':        '$shoalCwd',
+      'TEST_VERSION':    '$shoalVersion',
+      'TEST_LOG_ROOT':   '$logRoot'
+    }
+    manager.deploy(newConfiguration);
+    var instances = manager.listInstances();
+    var pids = Object.keys(instances);
+    var instance = instances[pids[0]];
+    assert.equal(instance.env.TEST_NAME, 'Ping Localhost');
+    assert.equal(instance.env.TEST_SHORT_NAME, 'ping-localhost');
+    assert.equal(instance.env.TEST_ID, '86b1eb6762b83a7c60221ab43c31830e89ac5a44');
+    assert.equal(instance.env.TEST_CWD.length > 20, true);
+    assert.equal(instance.env.TEST_VERSION.length < 12, true);
+    assert.equal(instance.env.TEST_LOG_ROOT, '/tmp');
+    var status = manager.status();
+  });
+
   it('should check if logging dir exists', function(){
     var manager = new Manager();
     var newConfiguration = JSON.parse(JSON.stringify(configuration));
