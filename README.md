@@ -21,7 +21,6 @@ This is still under heavy development. Do not run this in a production environme
 
 ### TODO
 
-* Allow internal variables to be used in configuration template
 * Setup Travis CI
 * Update documentation
 * Setup OSS site

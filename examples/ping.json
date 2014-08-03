@@ -24,7 +24,8 @@
       "cmd": "ping",
       "args": ["127.0.0.1"],
       "env": {
-        "MYVAR": "123"
+        "MYVAR": "123",
+        "WORKER_ID": "$processShortName"
       },
       "instances": 1
     },
