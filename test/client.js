@@ -13,6 +13,7 @@ describe('Client', function(){
 
   it('Should allow us to deploy a process configuration', function(done){
     var configuration = {
+      quiet: true,
       processes: [
         {
           name: 'Ping Localhost',
