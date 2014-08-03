@@ -1,6 +1,8 @@
 Shoal
 ==========
 
+[![Build Status](https://travis-ci.org/dominiek/node-shoal.png?branch=master)](https://travis-ci.org/dominiek/node-shoal)
+
 Shoal allows you to group and run multiple processes. Shoal manages these processes and exposes controls and status information via a HTTP JSON API. Aside from the JSON interface there is a Web user interface and a CLI.
 
 Use-cases:
@@ -21,6 +23,5 @@ This is still under heavy development. Do not run this in a production environme
 
 ### TODO
 
-* Setup Travis CI
 * Update documentation
 * Setup OSS site
