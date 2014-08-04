@@ -23,7 +23,7 @@ By default, the Shoal Manager (`shoald`) binds to `127.0.0.1` and allows executi
 
 ## Install
 
-```bash
+```
 npm install shoal
 ```
 
@@ -34,6 +34,7 @@ In order to deploy and monitor processes with one of the user interfaces, you ne
 By default, the Shoal Manager listens for commands on port *54047* and also binds the Admin UI on port *54047*:
 
 ```
+$ shoald
 Shoal Manager running on http://127.0.0.1:54047
 Shoal Admin UI running on http://127.0.0.1:54048
 ```
@@ -41,6 +42,7 @@ Shoal Admin UI running on http://127.0.0.1:54048
 Here are some CLI options that can be given to `shoald`:
 
 ```
+$ shoald --help
   Usage: shoald [options]
 
   Options:
@@ -59,7 +61,7 @@ Here are some CLI options that can be given to `shoald`:
 
 Once the Shoal Manager is running process configuration can be deployed with the `shoal` command.
 
-```bash
+```
 $ shoal deploy examples/ping.json
 
 New processes deployed
@@ -75,7 +77,44 @@ Ping Google      [  STOPPED  ]
 
 ## Configuration 
 
-TODO
+The Shoal Manager takes a JSON configuration that allows us to specify which processes should be run and how they should be executed. In Shoal, a *process* is a definition of a command that should be daemonized. One process can have many *instances* that all perform the same job.
+
+Here's an example configuration:
+
+```json
+{
+  "env": {
+    "NODE_ENV": "staging"
+  },
+  "killTimeoutMs": 30000,
+  "quiet": true,
+  "logRoot": "/var/log",
+  "processes": [
+    {
+      "name": "Cassandra Worker",
+      "cmd": "node",
+      "args": ["script/worker.js", "cassandra"],
+      "env": {
+        "NAME": "$processName",
+      },
+      "instances": 8,
+      "autoRestart": true,
+      "autoRestartTimeoutMs": 3000
+    },
+    {
+      "name": "Some Daemon",
+      "cmd": "somed",
+      "args": ["-f"],
+      "killTimeoutMs": 1000,
+      "logRoot": "~/log",
+      "outFile": "somed.log",
+      "errFile": "somed.error",
+      "instances": 0
+    }
+  ]
+}
+```
+
 
 ## Future
 
@@ -84,6 +123,6 @@ TODO
 
 ## TODO
 
+* Allow Shoal Manager to be started with a starting configuration
 * Update documentation
 * Setup OSS site
-* Allow
