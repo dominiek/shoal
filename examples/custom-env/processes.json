@@ -1,0 +1,41 @@
+{
+  "env": {
+    "NODE_ENV": "staging"
+  },
+  "killTimeoutMs": 30000,
+  "autoRestart": true,
+  "autoRestartTimeoutMs": 3000,
+  "processes": [
+    {
+      "name": "Ping Localhost",
+      "cmd": "ping",
+      "args": ["localhost"],
+      "instances": 2
+    },
+    {
+      "name": "Ping 127.0.0.1",
+      "cmd": "ping",
+      "args": ["127.0.0.1"],
+      "instances": 1,
+      "autoRestart": true,
+      "autoRestartTimeoutMs": 6000
+    },
+    {
+      "name": "Ping 127.0.0.1",
+      "cmd": "ping",
+      "args": ["127.0.0.1"],
+      "env": {
+        "UUID": "123-$processId",
+        "WORKER_ID": "$processShortName",
+        "NODE_ENV": "override"
+      },
+      "instances": 1
+    },
+    {
+      "name": "Ping Google",
+      "cmd": "ping",
+      "args": ["google.com"],
+      "instances": 0
+    }
+  ]
+}

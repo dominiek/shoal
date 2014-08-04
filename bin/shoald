@@ -13,7 +13,7 @@ var version = JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf8')
 program
   .version(version)
   .usage('[options]')
-  .option('-c, --config <path>', 'Run Manager with this initial configuration')
+  .option('-pd, --deploy <path>', 'Run Manager with this process deployment')
   .option('-p, --port <port>', 'Port to bind on (Default: ' + defaults.port + ')', parseInt)
   .option('-b, --bind <host>', 'Host to bind on (Default: ' + defaults.host + ')')
   .option('-ap, --admin-port <port>', 'Port to bind Admin UI on (Default: ' + defaults.adminPort + ')', parseInt)
@@ -41,8 +41,8 @@ server.start({
   quiet: program.quiet
 });
 
-if (program.config) {
-  var path = program.config;
+if (program.deploy) {
+  var path = program.deploy;
   if (!fs.existsSync(path)) {
     error(new Error("No such file: " + path));
   }
