@@ -1,7 +1,7 @@
 Shoal
 ==========
 
-[![Build Status](https://travis-ci.org/dominiek/node-shoal.png?branch=master)](https://travis-ci.org/dominiek/node-shoal)
+[![Build Status](https://travis-ci.org/dominiek/shoal.png?branch=master)](https://travis-ci.org/dominiek/shoal)
 
 Shoal allows you to group and run multiple processes. Shoal manages these processes and exposes controls and status information via a HTTP JSON API. Aside from the JSON interface there is a Web user interface and a CLI.
 
@@ -72,11 +72,11 @@ A status of current processes and number of instances can be retrieved using the
 shoal status
 ```
 
-![Build Status](http://dominiek.github.io/node-shoal/images/screenshot-cli.png)
+![Build Status](http://dominiek.github.io/shoal/images/screenshot-cli.png)
 
 Alternatively, you can use the Admin Web UI to view and control processes (Defaults to http://localhost:54048/):
 
-![Build Status](http://dominiek.github.io/node-shoal/images/screenshot-mobile-web.png)
+![Build Status](http://dominiek.github.io/shoal/images/screenshot-mobile-web.png)
 
 ## Configuration 
 
