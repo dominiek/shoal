@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "type": "ssl",
+    "keyFile": "cert/server.key",
+    "certFile": "cert/server.crt",
+    "caFile": "cert/ca.crt",
+    "passphrase": "shoal"
+  },
+  "disableAdminUi": true
+}

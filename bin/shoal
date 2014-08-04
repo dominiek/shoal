@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var fs = require('fs');
+var path = require('path');
 var program = require('commander');
 var colors = require('colors');
 
@@ -20,16 +21,17 @@ var getClient = function() {
 
   var defaults = {};
   if (program.config) {
-    var path = program.config;
-    if (!fs.existsSync(path)) {
-      error(new Error("No such file: " + path));
+    var configPath = program.config;
+    if (!fs.existsSync(configPath)) {
+      error(new Error("No such file: " + configPath));
     }
     try {
-      defaults = JSON.parse(fs.readFileSync(path).toString());
+      defaults = JSON.parse(fs.readFileSync(configPath).toString());
     } catch(err) {
       err.message = 'Invalid Configuration: ' + err.message;
       error(err);
     }
+    defaults.configDir = path.dirname(path.resolve(program.config));
   }
 
   defaults.port = program.port || defaults.port;

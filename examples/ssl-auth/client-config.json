@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "type": "ssl",
+    "keyFile": "cert/client.key",
+    "certFile": "cert/client.crt",
+    "caFile": "cert/ca.crt",
+    "passphrase": "shoal"
+  },
+  "host": "localhost"
+}

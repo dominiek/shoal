@@ -92,4 +92,57 @@ describe('Client', function(){
     });
   });
 
+  it('Should support SSL based certification', function(done){
+    var serverConfig = {
+      auth: {
+        type: 'ssl',
+        keyFile: __dirname + '/fixtures/ssl/server.key',
+        certFile: __dirname + '/fixtures/ssl/server.crt',
+        caFile: __dirname + '/fixtures/ssl/ca.crt',
+        passphrase: 'shoal'
+      }
+    };
+    var server = new Server(new Manager(), serverConfig);
+    server.start({quiet: true});
+
+    var clientConfig = {
+      auth: {
+        type: 'ssl',
+        keyFile: __dirname + '/fixtures/ssl/client.key',
+        certFile: __dirname + '/fixtures/ssl/client.crt',
+        caFile: __dirname + '/fixtures/ssl/ca.crt',
+        passphrase: 'shoal'
+      },
+      host: 'localhost'
+    };
+    var client = new Client();
+
+    async.series([
+      function(next) {
+        client.listInstances(function(err, result) {
+          assert.equal(err.message, 'socket hang up');
+          next();
+        });
+      },
+      function(next) {
+        client = new Client(clientConfig);
+        client.listInstances(function(err, result) {
+          assert.equal(err, null);
+          next();
+        });
+      },
+      function(next) {
+        delete clientConfig.caFile
+        client = new Client(clientConfig);
+        client.listInstances(function(err, result) {
+          assert.equal(err, null);
+          next();
+        });
+      }
+    ], function() {
+      server.stop();
+      done();
+    });
+  });
+
 });
