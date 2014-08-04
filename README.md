@@ -65,7 +65,7 @@ $ shoald --help
 Once the Shoal Manager is running process configuration can be deployed with the `shoal deploy` command:
 
 ```
-shoal deploy examples/ping.json
+shoal deploy examples/simple/processes.json
 ```
 
 A status of current processes and number of instances can be retrieved using the `shoal status` command:
