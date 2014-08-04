@@ -139,14 +139,14 @@ The following options can be given either in the top-level JSON or in the indvid
 
 When configuring custom environment variables for a process or configuration, you can use the following internal variables/macros:
 
-|Variable        |Description                     |
-|----------------|--------------------------------|
-|processName     |Configured name of the process|
-|processShortName|A dashed and lowercase conversion of the processName (e.g. My Worker => 'my-worker')|
-|processId       |A unique ID of the process based on the name, cmd and env|
-|shoalCwd        |The working directory path that the Shoal Manager is running in|
-|shoalVersion    |Shoal version|
-|logRoot         |The configured log root for the process|
+|Variable         |Description                     |
+|-----------------|--------------------------------|
+|$processName     |Configured name of the process|
+|$processShortName|A dashed and lowercase conversion of the processName (e.g. My Worker => 'my-worker')|
+|$processId       |A unique ID of the process based on the name, cmd and env|
+|$shoalCwd        |The working directory path that the Shoal Manager is running in|
+|$shoalVersion    |Shoal version|
+|$logRoot         |The configured log root for the process|
 
 ## Future
 
@@ -158,3 +158,27 @@ When configuring custom environment variables for a process or configuration, yo
 * Allow Shoal Manager to be started with a starting configuration
 * Update documentation
 * Setup OSS site
+
+## License
+
+(The MIT License)
+
+Copyright (c) 2014 Dominiek ter Heide <dominiek@bottlenose.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
