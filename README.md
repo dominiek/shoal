@@ -43,12 +43,14 @@ Here are some CLI options that can be given to `shoald`:
 
 ```
 $ shoald --help
+
   Usage: shoald [options]
 
   Options:
 
     -h, --help                     output usage information
     -V, --version                  output the version number
+    -c, --config <path>            Run Manager with this initial configuration
     -p, --port <port>              Port to bind on (Default: 54047)
     -b, --bind <host>              Host to bind on (Default: 127.0.0.1)
     -ap, --admin-port <port>       Port to bind Admin UI on (Default: 54048)
@@ -57,6 +59,7 @@ $ shoald --help
     --disable-ui                   Disable Admin UI
     --quiet                        Don't show Shoal info
     --verbose                      More verbose output
+
 ```
 
 Once the Shoal Manager is running process configuration can be deployed with the `shoal deploy` command:
@@ -158,7 +161,6 @@ When configuring custom environment variables for a process or configuration, yo
 
 ## TODO
 
-* Allow Shoal Manager to be started with a starting configuration
 * Update documentation
 * Setup OSS site
 
