@@ -40,6 +40,22 @@ describe('Manager', function(){
     assert.deepEqual(Object.keys(instances).map(function(pid) { return instances[pid].command; }), ['ping', 'ping', 'ping']);
   });
 
+  it('should have a restart option on deploy that restarts all workers', function(done){
+    var manager = new Manager();
+    manager.deploy(configuration);
+    var pids = Object.keys(manager.listInstances());
+    manager.deploy(configuration);
+    var newPids = Object.keys(manager.listInstances());
+    assert.deepEqual(pids, newPids);
+    manager.deploy(configuration, {restart: true});
+    setTimeout(function() {
+      for (var pid in manager.listInstances()) {
+        assert.equal(newPids.indexOf(pid), -1)
+      }
+      done();
+    }, 100);
+  });
+
   it('should give us a list of the current status', function(){
     var manager = new Manager();
     manager.deploy(configuration);

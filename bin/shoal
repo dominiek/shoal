@@ -96,7 +96,8 @@ program
 program
   .command('deploy <path>')
   .description('Deploy a new configuration of processes to Shoal Manager')
-  .action(function(path) {
+  .option('--restart', 'Restart all running instances')
+  .action(function(path, options) {
     if (!fs.existsSync(path)) {
       return error(new Error("No such file: " + path));
     }
@@ -108,7 +109,7 @@ program
       return error(err);
     }
     var client = getClient();
-    client.deploy(configuration, function(err, status) {
+    client.deploy(configuration, {restart: options.restart}, function(err, status) {
       if (err) return error(err);
       console.log("New processes deployed");
       process.exit();
