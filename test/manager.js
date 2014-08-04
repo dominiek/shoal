@@ -1,7 +1,7 @@
 
 var fs = require('fs');
 var assert = require('chai').assert;
-var Manager = require('../lib/manager');
+var Manager = require('../index').Manager;
 
 describe('Manager', function(){
   var configuration = {

@@ -2,9 +2,9 @@
 var assert = require('chai').assert;
 var async = require('async');
 
-var Manager = require('../lib/manager');
-var Server = require('../lib/server');
-var Client = require('../lib/client');
+var Manager = require('../index').Manager;
+var Server = require('../index').Server;
+var Client = require('../index').Client;
 
 var server = new Server(new Manager());
 server.start();
