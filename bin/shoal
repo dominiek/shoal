@@ -15,10 +15,12 @@ program
   .option('-s, --server <host>', 'Manager server to connect to (Default: ' + defaults.host + ')')
 program.name = 'shoal';
 
-var client = new Client({
-  port: program.port,
-  host: program.server
-});
+var getClient = function() {
+  return new Client({
+    port: program.port,
+    host: program.server
+  });
+};
 
 var error = function(err) {
   console.warn("Error:", err.message);
@@ -40,6 +42,7 @@ program
   .option('--verbose', 'Show more details about the running instances')
   .option('--json', 'Output detailed JSON')
   .action(function(options) {
+    var client = getClient();
     client.status(function(err, status) {
       if (err) return error(err);
       if (options.json) {
@@ -86,6 +89,7 @@ program
       err.message = 'Invalid Configuration: ' + err.message;
       return error(err);
     }
+    var client = getClient();
     client.deploy(configuration, function(err, status) {
       if (err) return error(err);
       console.log("New processes deployed");
