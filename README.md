@@ -159,11 +159,6 @@ When configuring custom environment variables for a process or configuration, yo
 * Improve default security features
 * Allow Shoal to dynamically control the number of instances per process definition based on the 'business' of the running instances
 
-## TODO
-
-* Update documentation
-* Setup OSS site
-
 ## License
 
 (The MIT License)
