@@ -59,21 +59,24 @@ $ shoald --help
     --verbose                      More verbose output
 ```
 
-Once the Shoal Manager is running process configuration can be deployed with the `shoal` command.
+Once the Shoal Manager is running process configuration can be deployed with the `shoal deploy` command:
 
 ```
-$ shoal deploy examples/ping.json
+shoal deploy examples/ping.json
+```
 
-New processes deployed
+A status of current processes and number of instances can be retrieved using the `shoal status` command:
 
-$ shoal status
-
-Ping Localhost   [ 2 RUNNING ] 
-Ping 127.0.0.1   [ 1 RUNNING ] 
-Ping 127.0.0.1   [ 1 RUNNING ] 
-Ping Google      [  STOPPED  ] 
 
 ```
+shoal status
+```
+
+![Build Status](http://dominiek.github.io/node-shoal/images/screenshot-cli.png)
+
+Alternatively, you can use the Admin Web UI to view and control processes (Defaults to http://localhost:54048/):
+
+![Build Status](http://dominiek.github.io/node-shoal/images/screenshot-mobile-web.png)
 
 ## Configuration 
 
