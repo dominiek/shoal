@@ -13,6 +13,7 @@ var version = JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf8')
 program
   .version(version)
   .usage('[options]')
+  .option('-c, --config <path>', 'Run server with this configuration')
   .option('-pd, --deploy <path>', 'Run Manager with this process deployment')
   .option('-p, --port <port>', 'Port to bind on (Default: ' + defaults.port + ')', parseInt)
   .option('-b, --bind <host>', 'Host to bind on (Default: ' + defaults.host + ')')
@@ -30,11 +31,25 @@ var error = function(err) {
   process.exit();
 };
 
+var defaults = {};
+if (program.config) {
+  var path = program.config;
+  if (!fs.existsSync(path)) {
+    error(new Error("No such file: " + path));
+  }
+  try {
+    defaults = JSON.parse(fs.readFileSync(path).toString());
+  } catch(err) {
+    err.message = 'Invalid Configuration: ' + err.message;
+    error(err);
+  }
+}
+
 var manager = new Manager({
   verbose: program.verbose,
   quiet: program.quiet
 });
-var server = new Server(manager);
+var server = new Server(manager, defaults);
 server.start({
   port: program.port,
   host: program.bind,
@@ -50,7 +65,7 @@ if (program.deploy) {
   try {
     configuration = JSON.parse(configuration);
   } catch(err) {
-    err.message = 'Invalid Configuration: ' + err.message;
+    err.message = 'Invalid Process Configuration: ' + err.message;
     error(err);
   }
   try {
@@ -60,7 +75,7 @@ if (program.deploy) {
   }
 }
 
-if (!program.disableAdminUi) {
+if (!program.disableAdminUi && !defaults.disableAdminUi) {
   var host = program.host;
   if (host == "0.0.0.0") host = 'localhost';
 

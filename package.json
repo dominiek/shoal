@@ -7,7 +7,7 @@
     "workers",
     "upstart"
   ],
-  "version": "0.1.4",
+  "version": "0.1.5",
   "repository": {
     "type": "git",
     "url": "git://github.com/dominiek/shoal.git"
@@ -33,6 +33,7 @@
     "async": "0.9.0",
     "request": "~2.39",
     "commander": "2.3.0",
+    "http-auth": "2.1.9",
     "colors": "*"
   },
   "devDependencies": {

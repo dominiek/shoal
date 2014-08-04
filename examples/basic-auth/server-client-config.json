@@ -1,0 +1,7 @@
+{
+  "auth": {
+    "type": "basic",
+    "key": "SHARED-SECRET-KEY"
+  },
+  "disableAdminUi": true
+}

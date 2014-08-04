@@ -50,7 +50,8 @@ $ shoald --help
 
     -h, --help                     output usage information
     -V, --version                  output the version number
-    -c, --config <path>            Run Manager with this initial configuration
+    -c, --config <path>            Run server with this configuration
+    -pd, --deploy <path>           Run Manager with this process deployment
     -p, --port <port>              Port to bind on (Default: 54047)
     -b, --bind <host>              Host to bind on (Default: 127.0.0.1)
     -ap, --admin-port <port>       Port to bind Admin UI on (Default: 54048)

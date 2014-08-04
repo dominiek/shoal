@@ -11,15 +11,31 @@ var version = JSON.parse(fs.readFileSync(__dirname + '/../package.json', 'utf8')
 program
   .version(version)
   .usage('[options] <command>')
+  .option('-c, --config <path>', 'Run client with this configuration')
   .option('-p, --port <port>', 'Manager server port to connect to (Default: ' + defaults.port + ')', parseInt)
   .option('-s, --server <host>', 'Manager server to connect to (Default: ' + defaults.host + ')')
 program.name = 'shoal';
 
 var getClient = function() {
-  return new Client({
-    port: program.port,
-    host: program.server
-  });
+
+  var defaults = {};
+  if (program.config) {
+    var path = program.config;
+    if (!fs.existsSync(path)) {
+      error(new Error("No such file: " + path));
+    }
+    try {
+      defaults = JSON.parse(fs.readFileSync(path).toString());
+    } catch(err) {
+      err.message = 'Invalid Configuration: ' + err.message;
+      error(err);
+    }
+  }
+
+  defaults.port = program.port || defaults.port;
+  defaults.host = program.server || defaults.host;
+
+  return new Client(defaults);
 };
 
 var error = function(err) {

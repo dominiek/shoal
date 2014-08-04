@@ -1,0 +1,25 @@
+{
+  "killTimeoutMs": 30000,
+  "autoRestart": true,
+  "autoRestartTimeoutMs": 3000,
+  "processes": [
+    {
+      "name": "Ping Localhost",
+      "cmd": "ping",
+      "args": ["localhost"],
+      "instances": 2
+    },
+    {
+      "name": "Ping 127.0.0.1",
+      "cmd": "ping",
+      "args": ["127.0.0.1"],
+      "instances": 1
+    },
+    {
+      "name": "Ping Google",
+      "cmd": "ping",
+      "args": ["google.com"],
+      "instances": 0
+    }
+  ]
+}
