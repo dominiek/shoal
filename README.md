@@ -87,7 +87,6 @@ Here's an example configuration:
     "NODE_ENV": "staging"
   },
   "killTimeoutMs": 30000,
-  "quiet": true,
   "logRoot": "/var/log",
   "processes": [
     {
@@ -114,7 +113,40 @@ Here's an example configuration:
   ]
 }
 ```
+Each process in the `processes` array takes the following required parameters:
 
+|Parameter    |Description                                |
+|-------------|-------------------------------------------|
+|name         |Name of the process/worker|
+|cmd          |Unix command to be executed without parameters (can be absolute path too)|
+|args         |Array of arguments to be given to the unix command|
+|instances    |The number of instances of this process that should be run. Can be 0 for inactive process definitions|
+
+The following options can be given either in the top-level JSON or in the indvidual process definitions (overrides global settings):
+
+|Option                   |Defaults |Description                                |
+|-------------------------|---------|--------------------------------------------|
+|env                      |{}       |Hash with environment variables that should be used. See below for available Macros|
+|killTimeoutMs            |         |Number of miliseconds after which a unresponsive process instance (not responding to SIGHUP) should be send a SIGKILL|
+|autoRestart              |false    |Automatically restart a process instance after exit|
+|autoRestartTimeoutMs     |1000     |Number of miliseconds to wait until restarting the process instance|
+|logRoot                  |         |Specify output logging directory. When specified each process will have stdout and stderr send to respective `process-name.out` and `process-name.err` files|
+|outFile                  |$processShortName.out|Override default stdout output file. Requires logRoot to be set|
+|errFile                  |$processShortName.err|Override default stderr output file. Requires logRoot to be set|
+|quiet                    |false    |Don't show any output from shoal manager server or admin UI|
+
+### Environment Macros
+
+When configuring custom environment variables for a process or configuration, you can use the following internal variables/macros:
+
+|Variable        |Description                     |
+|----------------|--------------------------------|
+|processName     |Configured name of the process|
+|processShortName|A dashed and lowercase conversion of the processName (e.g. My Worker => 'my-worker')|
+|processId       |A unique ID of the process based on the name, cmd and env|
+|shoalCwd        |The working directory path that the Shoal Manager is running in|
+|shoalVersion    |Shoal version|
+|logRoot         |The configured log root for the process|
 
 ## Future
 
