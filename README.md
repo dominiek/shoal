@@ -13,13 +13,13 @@ Use-cases:
 * Smart deployments: Automatically stop workers that have been removed from configuration, and start instances that were added
 * Centrally control logging, environment and restart behavior of processes
 
-### Status
+### Status & Security
 
-This project is still early stage. We do not recommend using this in production unless a proper security audit has been done. Current use should be for development environments only.
+We provide two authentication mechanisms out of the box (see *Authentication* below), however these are not configured by default and have not been battle-tested in production environments. 
 
-### Security
+By default, the Shoal Manager (`shoald`) binds to `127.0.0.1` (loopback device) and allows execution of commands sent to it. This is something to be taken into consideration when running outside of sandboxed environments.
 
-By default, the Shoal Manager (`shoald`) binds to `127.0.0.1` and allows execution of commands sent to it. This is something to be taken into consideration when running outside of sandboxed environments. No security features are supplied with Shoal currently so environment-specific security mechanisms should be implemented by yourself.
+Please be mindful of this when running this in a production environment.
 
 ## Install
 
@@ -82,7 +82,7 @@ Alternatively, you can use the Admin Web UI to view and control processes (Defau
 
 ![Build Status](http://dominiek.github.io/shoal/images/screenshot-mobile-web.png)
 
-## Configuration 
+## Process Configuration
 
 The Shoal Manager takes a JSON configuration that allows us to specify which processes should be run and how they should be executed. In Shoal, a *process* is a definition of a command that should be daemonized. One process can have many *instances* that all perform the same job.
 
@@ -154,6 +154,98 @@ When configuring custom environment variables for a process or configuration, yo
 |$shoalCwd        |The working directory path that the Shoal Manager is running in|
 |$shoalVersion    |Shoal version|
 |$logRoot         |The configured log root for the process|
+
+
+## Server/Client Configuration
+
+Using the `--config` flag you can supply a JSON file with configuration options to the `shoald` and `shoal` commands:
+
+|Option                   |Defaults |Description                                |
+|-------------------------|---------|--------------------------------------------|
+|host                     |127.0.0.1|Shoal Manager host to bind or connect to|
+|port                     |54047|Shoal Manager port to use for binding or connecting|
+|adminHost                     |127.0.0.1|Shoal Admin UI host to bind on|
+|adminPort                     |54048|Shoal Admin UI port to bind on|
+|auth                     ||Authentication options for Shoal Manager (see below)|
+|adminAuth                     ||Authentication options for Shoal Admin UI (see below)|
+
+## Authentication
+
+Currently we support two methods of authentication: `basic` and `ssl`.
+
+### Basic Authentication
+
+Here's an example of a server-client configuration with basic authentication:
+
+```json
+{
+  "auth": {
+    "type": "basic",
+    "key": "my scecret"
+  },
+  "disableAdminUi": true
+}
+```
+
+Instead of specifying the key in the configuration you can instead use `keyFile` to point to a file. 
+
+Basic auth can also be applied on the Admin UI as follows:
+
+```json
+{
+  "auth": {
+    "type": "basic",
+    "key": "my scecret"
+  },
+  "adminAuth": {
+    "type": "basic",
+    "username": "admin",
+    "key": "secret"
+  },
+}
+```
+
+### SSL Authentication
+
+A more secure way of authenticating is to use SSL. We recommend this authentication strategy.
+
+This requires first setting up the certificates (CA, Server and Client). A convenience script is provided in `tools`:
+
+```bash
+bash tools/create-ssl-keys.sh
+```
+
+Once the certificates are made, configure your server:
+
+```json
+{
+  "auth": {
+    "type": "ssl",
+    "keyFile": "cert/server.key",
+    "certFile": "cert/server.crt",
+    "caFile": "cert/ca.crt",
+    "passphrase": "shoal"
+  },
+   "disableAdminUi": true
+}
+```
+
+And your client:
+
+```json
+{
+  "auth": {
+    "type": "ssl",
+    "keyFile": "cert/client.key",
+    "certFile": "cert/client.crt",
+    "caFile": "cert/ca.crt",
+    "passphrase": "shoal"
+  },
+  "host": "localhost"
+}
+```
+
+A full example of this can be found in `examples/ssl-auth`. 
 
 ## Future
 
