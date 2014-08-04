@@ -7,10 +7,10 @@
     "workers",
     "upstart"
   ],
-  "version": "0.1.0",
-  "repository": "git://github.com/dominiek/node-shoal.git",
+  "version": "0.1.1",
+  "repository": "git://github.com/dominiek/shoal.git",
   "author": "Dominiek ter Heide <dominiek@bottlenose.com>",
-  "license": "BSD",
+  "license": "MIT",
   "main": "index",
   "bin": {
     "shoald": "./bin/shoald",
