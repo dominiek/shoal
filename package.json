@@ -8,7 +8,10 @@
     "upstart"
   ],
   "version": "0.1.1",
-  "repository": "git://github.com/dominiek/shoal.git",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dominiek/shoal.git"
+  },
   "author": "Dominiek ter Heide <dominiek@bottlenose.com>",
   "license": "MIT",
   "main": "index",
@@ -35,5 +38,13 @@
   "devDependencies": {
     "mocha": "*",
     "chai": "*"
+  },
+  "bugs": {
+    "url": "https://github.com/dominiek/shoal/issues"
+  },
+  "homepage": "https://github.com/dominiek/shoal",
+  "directories": {
+    "example": "examples",
+    "test": "test"
   }
 }
