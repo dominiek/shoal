@@ -6,5 +6,9 @@
     "caFile": "cert/ca.crt",
     "passphrase": "shoal"
   },
-  "disableAdminUi": true
+  "adminAuth": {
+    "type": "basic",
+    "username": "admin",
+    "password": "shoal"
+  }
 }
