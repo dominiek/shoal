@@ -34,7 +34,8 @@
     "request": "~2.39",
     "commander": "2.3.0",
     "http-auth": "2.1.9",
-    "colors": "*"
+    "colors": "*",
+    "waitpid": "ArdaXi/node-waitpid"
   },
   "devDependencies": {
     "mocha": "*",
