@@ -198,7 +198,7 @@ describe('Manager', function(){
     assert.equal(instance.env.TESTVAR, '123');
     assert.equal(!!instance.env.PATH, true);
     assert.equal(!!instance.startTs, true);
-    process.kill(pids[0], 'SIGTERM');
+    process.kill(parseInt(pids[0]), 'SIGTERM');
     setTimeout(function() {
       var instances = manager.listInstances();
       var pids = Object.keys(instances);
